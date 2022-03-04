@@ -101,22 +101,15 @@ public class GlobalGridController : MonoBehaviour
                 if ((currentGlobalGridX >= 0 && currentGlobalGridY >= 0) && (currentGlobalGridX < VoxelTilePlacerWfc.tileMapSizeX && currentGlobalGridY < VoxelTilePlacerWfc.tileMapSizeY))
                 {
                     //  painting
+                    //  min x, y    max x, y    material
+                    applyGrids = flyingBuilding.GrantingTerritorialZone(currentGlobalGridX, currentGlobalGridY, VoxelTilePlacerWfc.tileMapSizeX, VoxelTilePlacerWfc.tileMapSizeY, gridMap);
 
-                    applyGrids.Add(gridMap[currentGlobalGridX, currentGlobalGridY]);
-                    if (currentGlobalGridX > 0)
-                        applyGrids.Add(gridMap[currentGlobalGridX - 1, currentGlobalGridY]);
-                    if (currentGlobalGridX < VoxelTilePlacerWfc.tileMapSizeX - 1)
-                        applyGrids.Add(gridMap[currentGlobalGridX + 1, currentGlobalGridY]);
-                    if (currentGlobalGridY > 0)
-                        applyGrids.Add(gridMap[currentGlobalGridX, currentGlobalGridY - 1]);
-                    if (currentGlobalGridY < VoxelTilePlacerWfc.tileMapSizeY - 1)
-                        applyGrids.Add(gridMap[currentGlobalGridX, currentGlobalGridY + 1]);
-                    
                     foreach(var appGrid in applyGrids)
                     {
                         appGrid.ApplyNewMaterial(playerZoneColor[0]);
                     }
 
+                    //
                     activeZones.AddRange(applyGrids);
                 
                 }

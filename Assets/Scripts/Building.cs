@@ -9,12 +9,44 @@ public class Building : MonoBehaviour
     public float scale = 0.125f;
     public Vector2Int size = Vector2Int.one;
 
+    public BuildingsType currentBuildingType;
+    public enum BuildingsType
+    {
+        miniTower,
+        bigTower,
+        sawmill
+    }
+
     public void SetTransparent(bool available)
     {
         if (available)
             mainRender.material.color = Color.yellow;
         else
             mainRender.material.color = Color.red;
+    }
+
+    public List<Grid> GrantingTerritorialZone(int minX, int minY, int maxX, int maxY, Grid[,] map)
+    {
+        List<Grid> currentTerritorial = new List<Grid>();
+
+        switch (currentBuildingType)
+        {
+            case BuildingsType.miniTower:
+                //  mini tower
+                currentTerritorial.Add(map[minX, minY]);
+                if (minX > 0)
+                    currentTerritorial.Add(map[minX - 1, minY]);
+                if (minX < VoxelTilePlacerWfc.tileMapSizeX - 1)
+                    currentTerritorial.Add(map[minX + 1, minY]);
+                if (minY > 0)
+                    currentTerritorial.Add(map[minX, minY - 1]);
+                if (minY < VoxelTilePlacerWfc.tileMapSizeY - 1)
+                    currentTerritorial.Add(map[minX, minY + 1]);
+                break;
+
+
+        }
+        return currentTerritorial;
     }
 
     public void SetNormalCOlor()

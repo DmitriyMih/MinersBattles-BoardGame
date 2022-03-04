@@ -161,6 +161,7 @@ MonoBehaviour:
   mainRender: {fileID: 2773998778268404281}
   scale: 0.8
   size: {x: 2, y: 2}
+  currentBuildingType: 1
 --- !u!1 &5733377697112383492
 GameObject:
   m_ObjectHideFlags: 0
