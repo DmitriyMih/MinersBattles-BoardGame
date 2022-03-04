@@ -29,6 +29,7 @@ public class GlobalGridController : MonoBehaviour
     public Material[] playerZoneColor;
 
     public LayerMask groundLayer;
+    public List<Grid> activeZones = new List<Grid>();
 
     [ContextMenu("Enter grid")]
     public void EnterLogGrid()
@@ -91,7 +92,37 @@ public class GlobalGridController : MonoBehaviour
                     available = false;
                 //Debug.Log(x + " | " + worldPosition.x + " | " + z + " | " + worldPosition.z);
 
-                //flyingBuilding.transform.position = worldPosition;
+                int currentGlobalGridX = Mathf.RoundToInt(worldPosition.x / (scale * 8)) - 1;
+                int currentGlobalGridY = Mathf.RoundToInt(worldPosition.z / (scale * 8)) - 1;
+
+                TurningOffAllGridZones(); 
+                List<Grid> applyGrids = new List<Grid>();
+
+                if ((currentGlobalGridX >= 0 && currentGlobalGridY >= 0) && (currentGlobalGridX < VoxelTilePlacerWfc.tileMapSizeX && currentGlobalGridY < VoxelTilePlacerWfc.tileMapSizeY))
+                {
+                    //  painting
+
+                    applyGrids.Add(gridMap[currentGlobalGridX, currentGlobalGridY]);
+                    if (currentGlobalGridX > 0)
+                        applyGrids.Add(gridMap[currentGlobalGridX - 1, currentGlobalGridY]);
+                    if (currentGlobalGridX < VoxelTilePlacerWfc.tileMapSizeX - 1)
+                        applyGrids.Add(gridMap[currentGlobalGridX + 1, currentGlobalGridY]);
+                    if (currentGlobalGridY > 0)
+                        applyGrids.Add(gridMap[currentGlobalGridX, currentGlobalGridY - 1]);
+                    if (currentGlobalGridY < VoxelTilePlacerWfc.tileMapSizeY - 1)
+                        applyGrids.Add(gridMap[currentGlobalGridX, currentGlobalGridY + 1]);
+                    
+                    foreach(var appGrid in applyGrids)
+                    {
+                        appGrid.ApplyNewMaterial(playerZoneColor[0]);
+                    }
+
+                    activeZones.AddRange(applyGrids);
+                
+                }
+
+                Debug.Log(currentGlobalGridX + " | " + worldPosition.x + " | " + currentGlobalGridY + " | " + worldPosition.z);
+
                 flyingBuilding.SetTransparent(available);
                 
                 Vector3 newPosition = new Vector3(x, worldPosition.y, z);
@@ -102,11 +133,25 @@ public class GlobalGridController : MonoBehaviour
                 {
                     flyingBuilding.SetNormalCOlor();
                     flyingBuilding = null;
+
+                    foreach (var appGrid in applyGrids)
+                    {
+                        appGrid.isSetPlace = true;
+                    }
+
+                    applyGrids.Clear();
                 }
             }
         }
-        //else
-        //    zoneOutline.OutlineWidth = 0;
+    }
+
+    public void TurningOffAllGridZones()
+    {
+        foreach (var activeObj in activeZones)
+        {
+            //Debug.Log(obj + " | " + obj.currentCoordinat);
+            activeObj.ApplyDefaultMaterial();
+        }
     }
 
     public void OnDrawGizmos()

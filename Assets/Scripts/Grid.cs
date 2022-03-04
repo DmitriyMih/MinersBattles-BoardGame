@@ -22,6 +22,7 @@ public class Grid : MonoBehaviour
     public Renderer currentRender;
     public Material defaultMaterial;
 
+    public bool isSetPlace = false;
     public void Awake()
     {
         grid = new Building[gridSize.x, gridSize.y];
@@ -104,12 +105,18 @@ public class Grid : MonoBehaviour
 
     public void ApplyDefaultMaterial()
     {
+        if (isSetPlace == true)
+            return;
+
         currentRender.material = defaultMaterial;
     }
 
     public void ApplyNewMaterial(Material newMaterial)
     {
-        currentRender.material = newMaterial;
+        if (isSetPlace == true)
+            return;
+
+            currentRender.material = newMaterial;
     }
 
     public Transform gridPoint;
