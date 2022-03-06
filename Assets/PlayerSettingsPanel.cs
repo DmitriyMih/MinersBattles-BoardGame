@@ -9,8 +9,11 @@ public class PlayerSettingsPanel : MonoBehaviour
     public PlayerAccount currentPlayerAccount;
 
     public Color currentPlayerColor;
+    public Color copyCurrentColor;
 
     [Header("View Settings")]
+    public Image backgroundImage;
+
     public TextMeshProUGUI viewName;
     public string playerName;
 
@@ -22,6 +25,8 @@ public class PlayerSettingsPanel : MonoBehaviour
     public int currentIconNumber = -1;
 
     public Button iconButton;
+    public Button playerColorButton;
+    public Button destroyPanelButton;
 
     public TextMeshProUGUI prompt;
     public bool promtIsActive = true;
@@ -29,13 +34,33 @@ public class PlayerSettingsPanel : MonoBehaviour
 
     public void Start()
     {
+        viewName.text = "Your name is: ";
         iconButton.onClick.AddListener(() => CharacterIconChangeSwitch());
+        playerColorButton.onClick.AddListener(() => SetPlayerColor());
+        destroyPanelButton.onClick.AddListener(() => DestroyCurrentPanel());
+
+        copyCurrentColor = currentPlayerColor;
+
         CharacterIconChangeSwitch();
+        PanelInitialization();
     }
 
     public void PanelInitialization()
     {
+        currentPlayerAccount.playerName = playerName;
+        currentPlayerAccount.playerIcon = currentIcon;
+        currentPlayerAccount.playerColor = currentPlayerColor;
+    }
 
+    public void SetPlayerColor()
+    {
+        PlayerMenuManager.playerMenuManager.SetPlayerColor(this);
+        backgroundImage.color = currentPlayerColor;
+    }
+
+    public void ColorReturn()
+    {
+        PlayerMenuManager.playerMenuManager.ColorReturn(this);
     }
 
     public void CharacterIconChangeSwitch()
@@ -59,11 +84,20 @@ public class PlayerSettingsPanel : MonoBehaviour
         iconImage.sprite = currentIcon;
 
         prompt.text = "";
+        PanelInitialization();
+    }
+
+    public void DestroyCurrentPanel()
+    {
+        ColorReturn();
+        PlayerMenuManager.playerMenuManager.RemovePlayer(this);
     }
 
     public void NameInitialization(InputField currentInputField)
     {
         playerName = currentInputField.text;
         viewName.text = "Your name is: " + playerName;
+
+        PanelInitialization();
     }
 }

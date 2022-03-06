@@ -10,7 +10,7 @@ public class PlayerAccount
     [Header("Player data")]
     public string playerName;
     public int playerNumber;
-    public Image playerIcon;
+    public Sprite playerIcon;
     public Color playerColor;
     
     public List<Building> playerBuildings = new List<Building>();
