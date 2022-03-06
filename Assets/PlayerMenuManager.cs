@@ -9,6 +9,7 @@ public class PlayerMenuManager : MonoBehaviour
     public int minimumNimberOfPlayers = 2;
     public int maximumNumberOfPlayers = 6;
     public List<PlayerAccount> playerList = new List<PlayerAccount>();
+    public List<GameObject> playerAccountPanel = new List<GameObject>();
 
     public void StartGameButton()
     {

@@ -47,6 +47,11 @@ public class GlobalGridController : MonoBehaviour
         mainCamera = Camera.main;
     }
 
+    public void InitializationPlayersColor()
+    {
+
+    }
+
     public Transform debugSpher;
     public void Start()
     {

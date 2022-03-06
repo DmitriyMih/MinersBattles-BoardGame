@@ -36,10 +36,6 @@ public class Grid : MonoBehaviour
         globalGridController = GlobalGridController.globalGridController;
     }
 
-    public void GrantingTerritorialZone()
-    {
-
-    }
 
     public void ApplyDefaultMaterial()
     {
