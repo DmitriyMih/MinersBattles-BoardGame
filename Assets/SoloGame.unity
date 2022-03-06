@@ -948,6 +948,7 @@ MonoBehaviour:
   gridRotation: 0
   currentRender: {fileID: 685209425}
   defaultMaterial: {fileID: 2100000, guid: d33fc9c259525f041a2427b1d218e16b, type: 2}
+  isSetPlace: 0
   gridPoint: {fileID: 751130417}
   borderScale: 0
 --- !u!23 &685209425 stripped
@@ -1296,6 +1297,7 @@ MonoBehaviour:
   gridRotation: 0
   currentRender: {fileID: 820369780}
   defaultMaterial: {fileID: 2100000, guid: d33fc9c259525f041a2427b1d218e16b, type: 2}
+  isSetPlace: 0
   gridPoint: {fileID: 789149454}
   borderScale: 0
 --- !u!1001 &852571966
@@ -1470,6 +1472,7 @@ MonoBehaviour:
   gridRotation: 0
   currentRender: {fileID: 852571973}
   defaultMaterial: {fileID: 2100000, guid: d33fc9c259525f041a2427b1d218e16b, type: 2}
+  isSetPlace: 0
   gridPoint: {fileID: 1792992478}
   borderScale: 0
 --- !u!1 &934584699
@@ -1956,6 +1959,7 @@ MonoBehaviour:
   gridRotation: 0
   currentRender: {fileID: 1019419536}
   defaultMaterial: {fileID: 2100000, guid: d33fc9c259525f041a2427b1d218e16b, type: 2}
+  isSetPlace: 0
   gridPoint: {fileID: 1658284682}
   borderScale: 0
 --- !u!1 &1026271440
@@ -2222,6 +2226,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1060672773}
   - component: {fileID: 1060672774}
+  - component: {fileID: 1060672775}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -2257,6 +2262,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bottomPanel: {fileID: 1000286915}
   customBottomToggle: 0
+--- !u!114 &1060672775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060672772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fb9b9b324c54054f9caf8f18a7d7235, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerAccounts: []
 --- !u!1 &1062499395
 GameObject:
   m_ObjectHideFlags: 0
@@ -2867,6 +2885,7 @@ MonoBehaviour:
   gridRotation: 0
   currentRender: {fileID: 1283679062}
   defaultMaterial: {fileID: 2100000, guid: d33fc9c259525f041a2427b1d218e16b, type: 2}
+  isSetPlace: 0
   gridPoint: {fileID: 1778160718}
   borderScale: 0
 --- !u!1 &1302752613
@@ -3326,6 +3345,7 @@ MonoBehaviour:
   gridRotation: 0
   currentRender: {fileID: 1431241092}
   defaultMaterial: {fileID: 2100000, guid: d33fc9c259525f041a2427b1d218e16b, type: 2}
+  isSetPlace: 0
   gridPoint: {fileID: 1737080229}
   borderScale: 0
 --- !u!1 &1449038185

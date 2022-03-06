@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerMenuManager : MonoBehaviour
 {
@@ -42,6 +43,9 @@ public class PlayerMenuManager : MonoBehaviour
         {
             playerAccountList[i].playerNumber = i;
         }
+
+        SceneManager.LoadScene(2, LoadSceneMode.Single);
+        //SoloGameManager.InitializationList(playerAccountList);
     }
     [Header("Coloring settings")]
     public List<Color> colorsList = new List<Color>();
