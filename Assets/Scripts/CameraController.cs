@@ -5,7 +5,8 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public static CameraController cameraController;
-    
+    public float currentSideOfTheWorld = 0;
+
     public Transform player;
     public Transform followTransform;
 
@@ -25,7 +26,7 @@ public class CameraController : MonoBehaviour
     public float rotationAmount;
     public Vector3 zoomAmount;
 
-    public float minZoom; 
+    public float minZoom;
     public float maxZoom;
 
     public Vector3 newPosition;
@@ -64,6 +65,9 @@ public class CameraController : MonoBehaviour
 
     public void Update()
     {
+        currentSideOfTheWorld = Mathf.RoundToInt(transform.eulerAngles.y / 90) * 90;
+
+
         if (clampInitialization == false)
             return;
 
@@ -71,7 +75,7 @@ public class CameraController : MonoBehaviour
         {
             HandleMouseRotationInput();
             transform.position = followTransform.position;
-            
+
             //  zoom + rotation
             transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime * movementTime);
             cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, newZoom, Time.deltaTime);
@@ -83,15 +87,15 @@ public class CameraController : MonoBehaviour
             HandleMovementInput();
         }
 
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             followTransform = null;
         }
 
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            if(player!= null)
-            followTransform = player;
+            if (player != null)
+                followTransform = player;
         }
     }
 
@@ -130,7 +134,7 @@ public class CameraController : MonoBehaviour
 
     public void HandleMouseRotationInput()
     {
-        if(Input.mouseScrollDelta.y != 0)
+        if (Input.mouseScrollDelta.y != 0)
         {
             newZoom += Input.mouseScrollDelta.y * zoomAmount * mouseScroll;
 
@@ -138,11 +142,11 @@ public class CameraController : MonoBehaviour
             newZoom.z = -newZoom.y;
         }
 
-        if(Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1))
         {
             rotateStartPosition = Input.mousePosition;
         }
-        if(Input.GetMouseButton(1))
+        if (Input.GetMouseButton(1))
         {
             rotateCurrentPosition = Input.mousePosition;
 
@@ -154,7 +158,7 @@ public class CameraController : MonoBehaviour
         }
     }
 
-        public void HandleMovementInput()
+    public void HandleMovementInput()
     {
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
@@ -181,7 +185,7 @@ public class CameraController : MonoBehaviour
         }
 
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-        { 
+        {
             newPosition += (transform.right * -movementSpeed);
         }
 
@@ -212,7 +216,7 @@ public class CameraController : MonoBehaviour
         }
 
         newPosition = new Vector3(Mathf.Clamp(newPosition.x, minClampZone.x, maxClampZone.x), newPosition.y, Mathf.Clamp(newPosition.z, minClampZone.y, maxClampZone.y));
-            transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * movementTime);
+        transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * movementTime);
 
         transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime * movementTime);
         cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, newZoom, Time.deltaTime);
