@@ -102,7 +102,8 @@ public class PersonMove : MonoBehaviour
         }
 
         Debug.Log("Transform = " + transform.position + " | " + "Local = " + newPosition);
-        transform.localPosition = newPosition;
+        //transform.localPosition = newPosition;
+        transform.localPosition = Vector3.Lerp(transform.localPosition, newPosition, movementTime);
         transform.localPosition = new Vector3(Mathf.Clamp(transform.localPosition.x, minClampZone.x, maxClampZone.x), transform.localPosition.y, Mathf.Clamp(transform.position.z, minClampZone.y, maxClampZone.y));
     }
    
