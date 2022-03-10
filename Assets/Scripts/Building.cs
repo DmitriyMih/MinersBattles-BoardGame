@@ -14,6 +14,7 @@ public class Building : MonoBehaviour
     {
         miniTower,
         bigTower,
+        conveyor,
         sawmill
     }
 
@@ -32,18 +33,69 @@ public class Building : MonoBehaviour
         switch (currentBuildingType)
         {
             case BuildingsType.miniTower:
-                //  mini tower
+                //  centr
                 currentTerritorial.Add(map[minX, minY]);
+                //  left
                 if (minX > 0)
                     currentTerritorial.Add(map[minX - 1, minY]);
+                //  right
                 if (minX < VoxelTilePlacerWfc.tileMapSizeX - 1)
                     currentTerritorial.Add(map[minX + 1, minY]);
+                //  bottom
                 if (minY > 0)
                     currentTerritorial.Add(map[minX, minY - 1]);
+                //  top
                 if (minY < VoxelTilePlacerWfc.tileMapSizeY - 1)
                     currentTerritorial.Add(map[minX, minY + 1]);
                 break;
 
+            case BuildingsType.bigTower:
+                //  centr
+                currentTerritorial.Add(map[minX, minY]);
+                //  left
+                if (minX > 0)
+                {
+                    currentTerritorial.Add(map[minX - 1, minY]);
+                    if (minX > 1)
+                        currentTerritorial.Add(map[minX - 2, minY]);
+
+                }
+                //  right
+                if (minX < VoxelTilePlacerWfc.tileMapSizeX - 1)
+                {
+                    currentTerritorial.Add(map[minX + 1, minY]);
+                    if (minX < VoxelTilePlacerWfc.tileMapSizeX - 2)
+                        currentTerritorial.Add(map[minX + 2, minY]);
+                }
+                //  bottom
+                if (minY > 0)
+                {
+                    currentTerritorial.Add(map[minX, minY - 1]);
+                    if (minY > 1)
+                        currentTerritorial.Add(map[minX, minY - 2]);
+                }
+                //  top
+                if (minY < VoxelTilePlacerWfc.tileMapSizeY - 1)
+                {
+                    currentTerritorial.Add(map[minX, minY + 1]);
+                    if (minY < VoxelTilePlacerWfc.tileMapSizeY - 2)
+                        currentTerritorial.Add(map[minX, minY + 2]);
+                }
+                //-  title   -//  internal corners
+                //  left bottom
+                if (minX > 0 && minY > 0)
+                    currentTerritorial.Add(map[minX - 1, minY - 1]);
+                //  left top
+                if (minX > 0 && minY < VoxelTilePlacerWfc.tileMapSizeY - 1)
+                    currentTerritorial.Add(map[minX - 1, minY + 1]);
+                //  right bottom
+                if (minX < VoxelTilePlacerWfc.tileMapSizeX - 1 && minY > 0)
+                    currentTerritorial.Add(map[minX + 1, minY - 1]);
+                //  right top
+                if (minX < VoxelTilePlacerWfc.tileMapSizeX - 1 && minY < VoxelTilePlacerWfc.tileMapSizeY - 1)
+                    currentTerritorial.Add(map[minX + 1, minY + 1]);
+
+                break;
 
         }
         return currentTerritorial;
