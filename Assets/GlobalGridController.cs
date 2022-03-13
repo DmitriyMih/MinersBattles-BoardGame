@@ -26,20 +26,24 @@ public class GlobalGridController : MonoBehaviour
     [Header("Outline zone")]
     public GameObject currentOutlineGameobject;
     public Grid currentGrid;
-    public Material[] playerZoneColor;
+
+    public Material prefMaterial;
+    public List<Material> playerZoneColor = new List<Material>();
 
     public LayerMask groundLayer;
     public List<Grid> activeZones = new List<Grid>();
 
+    [Header("Conveyor")]
+    public float lastConveyorRotation = 0f;
     [ContextMenu("Enter grid")]
     public void EnterLogGrid()
     {
-        foreach(var obj in gridMap)
+        foreach (var obj in gridMap)
         {
             Debug.Log(obj + " | " + obj.currentCoordinat);
         }
     }
-    
+
     public void Awake()
     {
         globalGridController = this;
@@ -47,9 +51,15 @@ public class GlobalGridController : MonoBehaviour
         mainCamera = Camera.main;
     }
 
-    public void InitializationPlayersColor()
+    public void InitializationPlayersColor(List<PlayerAccount> accounts)
     {
-
+        playerZoneColor.Clear();
+        foreach (var acc in accounts)
+        {
+            Material newMaterial = new Material(prefMaterial);//Material.Create(acc.playerName);
+            newMaterial.color = acc.playerColor;
+            playerZoneColor.Add(newMaterial);
+        }
     }
 
     public Transform debugSpher;
@@ -76,14 +86,14 @@ public class GlobalGridController : MonoBehaviour
         {
             var groundPlane = new Plane(Vector3.up, Vector3.zero);
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            
+
             Ray buildingRay = new Ray(flyingBuilding.transform.position, -Vector3.up);
             RaycastHit hit;
 
             if (groundPlane.Raycast(ray, out float position))
             {
                 Vector3 worldPosition = ray.GetPoint(position);
-                
+
                 Debug.DrawRay(ray.direction, worldPosition, Color.red);
 
                 float x = Mathf.RoundToInt(worldPosition.x / scale) * scale - (scale / 2);
@@ -100,7 +110,11 @@ public class GlobalGridController : MonoBehaviour
                 int currentGlobalGridX = Mathf.RoundToInt(worldPosition.x / (scale * 8)) - 1;
                 int currentGlobalGridY = Mathf.RoundToInt(worldPosition.z / (scale * 8)) - 1;
 
-                TurningOffAllGridZones(); 
+                if (currentGlobalGridX >= 0 && currentGlobalGridX < VoxelTilePlacerWfc.tileMapSizeX && currentGlobalGridY >= 0 && currentGlobalGridY < VoxelTilePlacerWfc.tileMapSizeY)
+                    if (gridMap[currentGlobalGridX, currentGlobalGridY].isSetPlace == true)
+                        available = false;
+
+                TurningOffAllGridZones();
                 List<Grid> applyGrids = new List<Grid>();
 
                 if ((currentGlobalGridX >= 0 && currentGlobalGridY >= 0) && (currentGlobalGridX < VoxelTilePlacerWfc.tileMapSizeX && currentGlobalGridY < VoxelTilePlacerWfc.tileMapSizeY))
@@ -109,26 +123,29 @@ public class GlobalGridController : MonoBehaviour
                     //  min x, y    max x, y    material
                     applyGrids = flyingBuilding.GrantingTerritorialZone(currentGlobalGridX, currentGlobalGridY, VoxelTilePlacerWfc.tileMapSizeX, VoxelTilePlacerWfc.tileMapSizeY, gridMap);
 
-                    foreach(var appGrid in applyGrids)
+                    foreach (var appGrid in applyGrids)
                     {
-                        appGrid.ApplyNewMaterial(playerZoneColor[0]);
+                        appGrid.ApplyNewMaterial(playerZoneColor[SoloGameManager.soloGameManager.currentAccountNumber]);
                     }
 
                     //
+                    activeZones.Clear();
                     activeZones.AddRange(applyGrids);
-                
+
                 }
 
-                Debug.Log(currentGlobalGridX + " | " + worldPosition.x + " | " + currentGlobalGridY + " | " + worldPosition.z);
+                //Debug.Log(currentGlobalGridX + " | " + worldPosition.x + " | " + currentGlobalGridY + " | " + worldPosition.z);
 
                 flyingBuilding.SetTransparent(available);
-                
+
                 Vector3 newPosition = new Vector3(x, worldPosition.y, z);
                 flyingBuilding.transform.position = newPosition;
                 debugSpher.position = newPosition;
 
                 if (Input.GetKeyDown(KeyCode.F) && available)
                 {
+                    flyingBuilding.buildingOwner = SoloGameManager.soloGameManager.currentmainAccount;
+
                     flyingBuilding.SetNormalCOlor();
                     flyingBuilding = null;
 
@@ -139,8 +156,23 @@ public class GlobalGridController : MonoBehaviour
 
                     applyGrids.Clear();
                 }
+
+                if (Input.GetKey(KeyCode.Escape))
+                {
+                    Destroy(flyingBuilding.gameObject);
+                    flyingBuilding = null;
+
+                    foreach (var appGrid in applyGrids)
+                    {
+                        appGrid.ApplyDefaultMaterial();
+                    }
+                    applyGrids.Clear();
+                }
             }
         }
+        else
+            if(activeZones.Count != 0)
+                activeZones.Clear();
     }
 
     public void TurningOffAllGridZones()

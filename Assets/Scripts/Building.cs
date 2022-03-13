@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
+    public PlayerAccount buildingOwner;
+    public Grid cellsInPossession;
+
     public Renderer mainRender;
 
     public float scale = 0.125f;
@@ -18,12 +21,45 @@ public class Building : MonoBehaviour
         sawmill
     }
 
+    [Header("Conveyor")]
+    public Conveyor conveyor;
+    public List<Renderer> conveyorsRenders = new List<Renderer>();
+    public void Start()
+    {
+        if (currentBuildingType == BuildingsType.conveyor)
+        {
+            conveyor = GetComponent<Conveyor>();
+            conveyor.currentBuilding = this;
+        }
+    }
+
     public void SetTransparent(bool available)
     {
         if (available)
-            mainRender.material.color = Color.yellow;
+        {
+            if (currentBuildingType == BuildingsType.conveyor)
+            {
+                foreach (var render in conveyorsRenders)
+                {
+                    render.material.color = SoloGameManager.soloGameManager.currentmainAccount.playerColor;
+                }
+            }
+            else
+                mainRender.material.color = SoloGameManager.soloGameManager.currentmainAccount.playerColor;
+     
+        }
         else
-            mainRender.material.color = Color.red;
+        {
+            if (currentBuildingType == BuildingsType.conveyor)
+            {
+                foreach (var render in conveyorsRenders)
+                {
+                    render.material.color = Color.black;
+                }
+            }
+            else
+                mainRender.material.color = Color.black;
+        }
     }
 
     public List<Grid> GrantingTerritorialZone(int minX, int minY, int maxX, int maxY, Grid[,] map)
@@ -97,13 +133,28 @@ public class Building : MonoBehaviour
 
                 break;
 
+            case BuildingsType.conveyor:
+                conveyor.Enabled();
+                break;
+
         }
         return currentTerritorial;
     }
 
     public void SetNormalCOlor()
     {
-        mainRender.material.color = Color.white;
+        if (currentBuildingType == BuildingsType.conveyor)
+        {
+            foreach (var render in conveyorsRenders)
+            {
+                render.material.color = buildingOwner.playerColor;
+            }
+        }
+        else
+            mainRender.material.color = buildingOwner.playerColor;
+
+        if (currentBuildingType == BuildingsType.conveyor && conveyor != null)
+            conveyor.Disabled();
     }
 
     public void OnDrawGizmos()

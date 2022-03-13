@@ -5,7 +5,9 @@ using UnityEngine;
 public class PersonMove : MonoBehaviour
 {
     [Header("Settings")]
+    public GlobalGridController globalGridController;
     public float currentSideOfTheWorld = 0;
+    public bool isActive = false;
 
     [Header("Move settings")]
     public Vector2 minClampZone;
@@ -22,8 +24,11 @@ public class PersonMove : MonoBehaviour
 
     public void Start()
     {
-        minClampZone = GlobalGridController.globalGridController.minGridSize;
-        maxClampZone = GlobalGridController.globalGridController.maxGridSize;
+        globalGridController = GlobalGridController.globalGridController;
+        isActive = true;
+
+        minClampZone = globalGridController.minGridSize;
+        maxClampZone = globalGridController.maxGridSize;
 
         float x = Mathf.RoundToInt(transform.position.x / scale) * scale - (scale / 2);
         float z = Mathf.RoundToInt(transform.position.z / scale) * scale - (scale / 2);
@@ -34,8 +39,11 @@ public class PersonMove : MonoBehaviour
 
     public void Update()
     {
-        minClampZone = GlobalGridController.globalGridController.minGridSize;
-        maxClampZone = GlobalGridController.globalGridController.maxGridSize;
+        if (isActive == false)
+            return;
+
+        minClampZone = globalGridController.minGridSize;
+        maxClampZone = globalGridController.maxGridSize;
 
         currentSideOfTheWorld = CameraController.cameraController.currentSideOfTheWorld;
 
@@ -76,35 +84,39 @@ public class PersonMove : MonoBehaviour
         switch (Mathf.RoundToInt(currentSideOfTheWorld / 90))
         {
             case 0:
-                Debug.Log("0");
+                //Debug.Log("0");
                 newPosition = new Vector3(transform.localPosition.x + horizontal, transform.localPosition.y, transform.localPosition.z + vertical);
                 break;
 
             case 1:
-                Debug.Log("1");
+                //Debug.Log("1");
                 newPosition = new Vector3(transform.localPosition.x + vertical, transform.localPosition.y, transform.localPosition.z - horizontal);
                 break;
 
             case 2:
-                Debug.Log("2");
+                //Debug.Log("2");
                 newPosition = new Vector3(transform.localPosition.x - horizontal, transform.localPosition.y, transform.localPosition.z - vertical);
                 break;
 
             case 3:
-                Debug.Log("3");
+                //Debug.Log("3");
                 newPosition = new Vector3(transform.localPosition.x - vertical, transform.localPosition.y, transform.localPosition.z + horizontal);
                 break;
 
             case 4:
-                Debug.Log("4"); 
+                //Debug.Log("4"); 
                 newPosition = new Vector3(transform.localPosition.x + horizontal, transform.localPosition.y, transform.localPosition.z + vertical);
                 break;
         }
 
-        Debug.Log("Transform = " + transform.position + " | " + "Local = " + newPosition);
-        //transform.localPosition = newPosition;
+        //Debug.Log("Transform = " + transform.position + " | " + "Local = " + newPosition);
         transform.localPosition = Vector3.Lerp(transform.localPosition, newPosition, movementTime);
         transform.localPosition = new Vector3(Mathf.Clamp(transform.localPosition.x, minClampZone.x, maxClampZone.x), transform.localPosition.y, Mathf.Clamp(transform.position.z, minClampZone.y, maxClampZone.y));
+
+        int currentGlobalGridX = Mathf.RoundToInt(transform.position.x / (scale * 8)) - 1;
+        int currentGlobalGridY = Mathf.RoundToInt(transform.position.z / (scale * 8)) - 1;
+
+        
     }
-   
+
 }
