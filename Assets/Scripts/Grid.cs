@@ -36,7 +36,7 @@ public class Grid : MonoBehaviour
         globalGridController = GlobalGridController.globalGridController;
     }
 
-
+     
     public void ApplyDefaultMaterial()
     {
         if (isSetPlace == true)
